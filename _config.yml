@@ -4,8 +4,8 @@
 ####################################
 #
 title: Arnab Bhadury
-email:
-description: Random thoughts.
+email: arnabhy@gmail.com
+description: Random thoughts
 url:
 
 
@@ -14,7 +14,7 @@ url:
 # Jekyll configuration
 ####################################
 #
-timezone:          Europe/Paris
+timezone:          America/Vancouver
 markdown:          kramdown
 highlighter:       rouge
 excerpt_separator: <!--more-->
@@ -35,11 +35,11 @@ kramdown:
 owner:
   name: Arnab Bhadury 
   avatar: logo.png
-  job: "Topics @ Flipboard"
-  bio: "Random thoughts."
-  email: abhadury@flipboard.com
+  job: "Topics and recommender systems @ Flipboard"
+  bio: "ML Engineer in Vancouver, ML meetups co-organizer"
+  email: "abhadury@flipboard.com"
   disqus-shortname:
-  twitter: #ArnieB0426
+  twitter: "ArnieB0426"
   facebook: #username
   google:
     plus: #username
@@ -48,7 +48,7 @@ owner:
     ad-client:
     ad-slot:
   bing-verify:
-  github: #username
+  github: arnie0426
   gitlab: #username
   stackoverflow: #123456/username   from a "http://stackoverflow.com/users/123456/username" link
   linkedin: #username

@@ -43,7 +43,7 @@ owner:
   facebook: #username
   google:
     plus: #username
-    analytics:
+    analytics: UA-133290963-1
     verify:
     ad-client:
     ad-slot:

@@ -35,15 +35,15 @@ kramdown:
 owner:
   name: Arnab Bhadury 
   avatar: logo.png
-  job: "Topics and recommender systems @ Flipboard"
-  bio: "ML Engineer in Vancouver, ML meetups co-organizer"
+  job: "ML Engineer @ Flipboard, ML meetups co-organizer"
+  bio: "Interested in Topic Modeling/Extraction, Bayesian Inference, Recommender Systems, Counterfactual Evaluation and endless sarcasm."
   email: "abhadury@flipboard.com"
   disqus-shortname:
   twitter: "ArnieB0426"
   facebook: #username
   google:
     plus: #username
-    analytics:
+    analytics: UA-133304905-1
     verify:
     ad-client:
     ad-slot:

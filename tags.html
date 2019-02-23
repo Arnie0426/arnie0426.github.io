@@ -1,11 +1,17 @@
 ---
 layout: page
-title:  Tags
-permalink: /tags/
+title:  About Me
+permalink: /me
 ---
 
-<h5>Tag cloud <i class="fa fa-cloud info-text-color"></i></h5>
-<ul class="tag-cloud">
+<h5>Arnab Bhadury</h5>
+
+<p>My name is Arnab Bhadury. I'm a Machine Learning engineer living in Vancouver, BC, Canada. </p>
+
+<p>I am currently employed at Flipboard where I work on recommender systems, and wrote the multilingual topic extraction system. I am also the co-organizer of a bunch of AI meetups in Vancouver.</p>
+
+<p>I am a Tsinghua University graduate and studied under the supervision of Prof. Jun Zhu.</p>
+<!-- <ul class="tag-cloud">
 {% for tag in site.tags %}
   <li style="font-size: {{ tag | last | size | times: 100 | divided_by: site.tags.size | plus: 70  }}%">
     <a class="post-tag" href="#{{ tag | first | slugize }}">
@@ -13,9 +19,9 @@ permalink: /tags/
     </a>
   </li>
 {% endfor %}
-</ul>
+</ul> -->
 
-<div class="tag-list">
+<!-- <div class="tag-list">
 {% for tag in site.tags %}
   <div class="tag-group">
     {% capture tag_name %}{{ tag | first }}{% endcapture %}
@@ -26,5 +32,5 @@ permalink: /tags/
     </article>
     {% endfor %}
   </div>
-{% endfor %}
+{% endfor %} -->
 </div>

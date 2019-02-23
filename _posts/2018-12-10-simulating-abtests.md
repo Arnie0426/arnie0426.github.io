@@ -6,9 +6,10 @@ categories: [intro, counterfactuals]
 comments: false
 ---
 
-While developing machine learning (ML) algorithms in production environments, we usually optimize a function or a loss that has nothing to do with our business goals. For example, we might actually care about metrics such as _click-through-rate_ or _average time-spent_ or _ad-revenue_ but our machine learning algorithms often minimize log-loss or root mean squared error (RMSE) of arbitrary quantities for computational ease. It is often seen that these machine learning metrics don't correlate with the original targets, which is why running online A/B tests is so vital in production because it lets us verify our ML models against the true objectives of a task. 
 
-However, running A/B tests can be quite expensive because you need to launch some productionized version of an experiment, and let it run for a significant amount of time to get reliable results, during which you also risk potentially exposing a poorer system to users. This is why reliable offline evaluation is absolutely critical because it can allow a business to experiment more in a sandbox environment as well as provide intuitions on what is worth launching/testing in production.
+While developing machine learning (ML) algorithms in production environments, we usually optimize a function or a loss that has nothing to do with our business goals. For example, we might actually care about metrics such as _click-through-rate_ or _ad-revenue_ but our machine learning algorithms often minimize [log-loss](http://wiki.fast.ai/index.php/Log_Loss) or [root mean squared error (RMSE)](https://en.wikipedia.org/wiki/Root-mean-square_deviation) of arbitrary quantities for computational ease. It is often seen that these ML metrics don't correlate with the original targets, which is why running online A/B tests is so vital in production because it lets us verify our ML models against the true objectives of a task. 
+
+However, running A/B tests is expensive because it requires some productionized version of an experiment, which needs to run for a significant amount of time to get reliable results during which you risk potentially exposing a poorer system to users. This is why reliable offline evaluation is absolutely critical because it can allow developers to experiment more in a sandbox environment as well as gain intuitions on what is worth launching/testing in the wild.
 
 <!--more-->
 
@@ -20,54 +21,54 @@ While it has been common practice to evaluate systems using these kinds of appro
 
 For example, imagine in a news recommendation problem, you were trying to evaluate two algorithms that performed differently for two different kinds of content (major publishers and long-tail). On first glance, it may be obvious to say that _Algorithm 2_ is probably "better" than _Algorithm 1_ but in industry it is often the case that you can have _Algorithm 1_ running in production, and you may have realized that it performs poorly for long-tail content and hence mostly only recommended articles from the major publishers, and wildly overestimate the true performance of an algorithm. 
 
-<!-- <div id="simpsonsParadox"></div>
+<script src="/assets/utils.js"></script>
 
-<div style="text-align:center"><div style="display:inline-block;">
-<button type="button" class="btn btn-default" id="randomize_usage">
-  <span class="glyphicon glyphicon-refresh"></span> Randomize
-</button>
-</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 
-<script src="https://d3js.org/d3.v4.min.js"></script> -->
+<div class="simpsonsContainer" style="width: 100%; display: table;">
+    <div style="display: table-row;">
+        <div style="width: 30%; display: table-cell; vertical-align: top;" markdown="1"> 
 
-<!-- <script src="/assets/alias_table.js"></script>
-<script>
-var table = new AliasTable([0.4, 0.3, 0.2, 0.08, 0.02]);
-table.displayState(d3.select("#aliastable"), 0);
-function randomizeAliasTable() {
-    table.stop = true;
-    table = new AliasTable([Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]);
-    table.displayState(d3.select("#aliastable"), 0);
-}
-d3.select("#randomize_aliastable").on("click", randomizeAliasTable);
-</script> -->
-<!-- 
+|  | Major Publishers | Long-tail |
+|:--------|:-------:|--------:|
+| Algorithm 1  | 0.80   | 0.20   |
+| Algorithm 2   | 0.75   | 0.75   |
+        
+   </div>
+   <div style="padding-left: 5%; width: 60%; display: table-cell;" id="simpsonsChart">
+      <div id="chart_canvas">
+         <canvas id="simpsons_canvas"></canvas>
+      </div>
+      <div id="simpsonsMPText" style="text-align:center;"></div>
+      <div id="simpsons_slider" style="text-align:center;">
+<input id="mh_vis_s" type ="range" min ="60" max="100" step="2" value="95" oninput="updatePerfVals(value)" list="stepsizes" style="text-align:center;"/>
+<datalist id="stepsizes">
+  <option>60</option>
+  <option>70</option>
+  <option>80</option>
+  <option>90</option>
+  <option>100</option>
+</datalist>
+</div>
+   </div>
+   </div>
+
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
 <script src="/assets/simpsons_paradox.js"></script>
 
-<script>
-var table = new Usage([0.8, 0.3]);
-table.displayState(d3.select("#simpsonsParadox"), 0);
-function randomize() {
-   table.stop = true;
-   table = new Usage([Math.random(), Math.random()]);
-   table.displayState(d3.select("#simpsonsParadox"), 0);
-}
-d3.select("#randomize_usage").on("click", randomize);
-</script> -->
 
-<!-- | | Cohort 1 | Cohort 2 |
-|:--------|:-------:|--------:|
-| Article 1   | 0.7   | 0.2   |
-| Article 2   | 0.8   | 0.3   |
-|---- -->
-
-Had the users been exposed to the true distribution of major publishers and long tail content by our algorithm in production, we could fairly evaluate our algorithms offline, and we can always pick a small fraction of users that are always given uniformly random results and the feedback we observe on these results would not have the same sampling bias of the existing algorithm in production. This can obviously be an extremely hard sell to any business/product to show some users completely bogus results but if this is done, we can mitigate a lot of the afforementioned sampling bias from our validation data. Since showing uniformly random results is mostly impractical\*, this post explores practical alternative possibilities for offline evaluation using counterfactual thinking.
+Had the users been exposed to the true distribution of major publishers and long tail content by our algorithm in production, we could fairly evaluate our algorithms offline, and we can always pick a small fraction of users that are always given uniformly random results and the feedback we observe on these results would not have the same sampling bias of the existing algorithm in production. This can obviously be an extremely hard sell to any business/product to show some users completely bogus results but if this is done, we can mitigate a lot of the afforementioned sampling bias from our validation data. Since showing uniformly random results is mostly impractical\*, this post explores alternative possibilities for offline evaluation using counterfactual thinking.
 
 ### Offline evaluation as a regression problem
 
 In user-interactive systems, it is generally easy to collect a dataset $$ \mathcal{D} = [(x_1, y_1, r_1), \dots, (x_n, y_n, r_n)] $$ where the $$ x_i $$ is what a system knows about the user and her intent, $$ y_i $$ is the _item_ recommended to user by some "algorithm" $$ \mathcal{A_0} $$, and $$ r_i $$ is the _reward_ (like/view/dislike) that a user provides to the system. This reward can be both implicit (view) or explicit (upvote). Many recommendation algorithms such as [collaborative filtering](http://yifanhu.net/PUB/cf.pdf) use this dataset to learn algorithms that can generate better $$ \textbf{y} $$. In contrast, an offline estimator's goal is to estimate the rewards $$ \textbf{r} $$ given a new set of $$ \textbf{y} $$ generated by a different algorithm $$ \mathcal{A} $$.
 
-Given this dataset, it is relatively straightforward to simply learn a reward predictor $$ \hat{\textbf{r}} $$ as a function of the user-context and the recommended items if we think of the offline estimation problem as a classic regression problem. 
+Given this dataset, it is relatively straightforward to learn a reward predictor $$ \hat{\textbf{r}} $$ as a function of the user-context and the recommended items if we think of the offline estimation problem as a classic regression problem. 
 
 $$
 min_{\textbf{w}} = \frac{1}{2} \sum_{i=1}^n (\hat{\textbf{r}}(x_i, y_i, \textbf{w}) - r_i)^2 + \frac{\lambda}{2} \left\lVert w\right\rVert^2
@@ -83,39 +84,59 @@ Another reason why a vanilla reward predictor doesn't perform that well is becau
 
 ### Inverse Propensity Scoring
 
-Given a counterfactual framework, modeling the bias in the logs directly as opposed to modeling the reward works much better for offline evaluation. One classic way to do that would be [Inverse Propensity Scoring (IPS)](http://www.rebeccabarter.com/blog/2017-07-05-ip-weighting/) which evaluates treatments independent of the logged confounders. The key idea in IPS is to reweight samples based on _propensities_ of the logged items. Propensity $$ p_{x_i, y_i} $$ in this context is simply the probability of the item $$ y_i $$ shown to the user $$ x_i $$ at the point of logging. In user-interactive systems, it is generally an _algorithm_ that decides which item to show to a user, and it is generally straightforward to also log the probability o
+Given a counterfactual framework, modeling the bias in the logs directly as opposed to modeling the reward works much better for offline evaluation. One classic way to do that would be [Inverse Propensity Scoring (IPS)](http://www.rebeccabarter.com/blog/2017-07-05-ip-weighting/) which evaluates treatments independent of the logged confounders. The key idea in IPS is to reweight samples based on _propensities_ of the logged items using [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling). Propensity $$ p_{x_i, y_i} $$ in this context is simply the probability of the item $$ y_i $$ shown to the user $$ x_i $$ at the point of logging. 
+
+If propensities for the live algorithm $$ A_0 $$ were logged, our offline dataset would look more like $$ \mathcal{D} = [(x_1, y_1, p_{x_1, y_1}, r_1), \dots, (x_n, y_n, p_{x_n, y_n}, r_n)] $$. With this data, IPS gives us unbiased estimates of the performance of *any* algorithm with:
+
+$$
+\textbf{Performance}(A) = \frac{1}{n} \sum_{i=1}^n (r_i \cdot \frac{p'_{x_i, y_i}}{p_{x_i, y_i}})
+$$
 
 
+Where $$p'_{x_i, y_i}$$ is the propensity for $$y_i$$ item to be recommended to user $$x_i$$ for a *new* different algorith $$A$$. Because of the nature of the equation, for any item that is recommended by the new algorithm $$A$$, $$A_0$$ needs to have a non-zero propensity for that item. Here's some sample Python code that lets you evaluate performance of a new algorithm offline.
 
+~~~ python
+def inverse_propensity_scoring()
+module Jekyll
+  class TagIndex < Page
+    def initialize(site, base, dir, tag)
+      @site = site
+      @base = base
+      @dir = dir
+      @name = 'index.html'
+      self.process(@name)
+      self.read_yaml(File.join(base, '_layouts'), 'tag_index.html')
+      self.data['tag'] = tag
+      tag_title_prefix = site.config['tag_title_prefix'] || 'Tagged: '
+      tag_title_suffix = site.config['tag_title_suffix'] || '&#8211;'
+      self.data['title'] = "#{tag_title_prefix}#{tag}"
+      self.data['description'] = "An archive of posts tagged #{tag}."
+    end
+  end
+end
+~~~
 
+### Practical Points
 
+#### Deterministic Ranking Algorithms
 
-<!-- 
+Most user-interactive systems tend to be in full _exploitation_ mode and score a list of items based on content or collaborative (or both) filtering, and then _greedily_ rank/sort before showing them to the user. For IPS to work, however, the system needs to be stochastic and many production systems run such deterministic algorithms. A practical way around it is to get multinomial samples without replacement, i.e. create a weighted dice based on the scores and roll for each item, reweighting the dice after each roll. [NumPy's](https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.random.choice.html) `np.random.choice` with `replace=False` lets you do that very easily in Python. 
 
-### User-interactive systems and the partial information setting
+#### Non-zero propensities for items
 
-A user-interactive system (e.g. product search, social media feeds etc.) involves showing a user a set of items $$ y_i $$ given a certain user context or intent $$ x_i $$.  In such systems, users can only provide feedback $$ r_i $$ such as clicks/likes/dislikes/ratings etc. Many ML models aggregate this data, and learn a model but this can be problematic because the averaged observations can be very confounding.
+Generating propensity for every item for many problems such as news recommendation is almost impossible given the number of articles that get published on the internet everyday. Practically, if the feed length was 50 for each user, we could simply create a multinomial of the top 500 items or so for each user under the production algorithm $$A_0$$ -- this means that we won't be able to evaluate a future algorithm $$A$$ if it were to recommend items outside of this candidate set to the user but if the algorithm in production was any good, the top 500 items would surely include the best 50 of a better algorithm.
 
-For a toy example, ...
-You see [Simpson's paradox]() like this all the time in production because of the huge _presentation and sampling bias_ that exists in the data. 
+#### High Variance and High Sampling Complexity
 
-   If all this data was collected in logs, we could have a dataset $$ \mathcal{D} = [(x_1, y_1, r_1), \dots , (x_n, y_n, r_n)] $$, and an ideal system would produce $$ \boldsymbol y $$ such that the reward $$ \boldsymbol r $$ is maximized. This formulation is identical to a [contextual bandit problem](https://arxiv.org/abs/1003.0146) and the only assumption made is that $$ \boldsymbol r $$ is dependent on $$ \boldsymbol x $$ and $$ \boldsymbol y $$. This reward can be anything -- like a click or time-spent or even something like ad-revenue.
+While IPS lets your evaluator converge to the real performance in the limit, it is still an extremely sample hungry algorithm (requires a lot of logs) and the estimates can have high variance with few samples. [Adith Swaminathan and Thorsten Joachims](http://www.cs.cornell.edu/people/tj/publications/swaminathan_joachims_15d.pdf) have developed a better normalization for the problem, which makes IPS a little less sample hungry and is evaluated by:
 
-Considering that it is relatively easy to collect a lot of such logs, a simplistic thing to try could be to learn $$ \hat{\boldsymbol r}(\boldsymbol x, \boldsymbol y) $$ as a function of the context and items from our log data $$ \mathcal{D} $$. This turns out to be problematic because of the huge _presentation and sampling bias_ that exists in the dataset as we only observe feedback on items a production algorithm showed to the users. Modeling $$ \hat{\boldsymbol r} $$ as a function of $$ x $$ and $$ y $$ also introduces _modeling bias_ because a reward can have dependency on many factors not captured by our context and feeds. 
+$$
+\textbf{Performance}_{\textbf{(SNIPS)}}(A) = \frac{\sum_{i=1}^n (r_i \cdot \frac{p'_{x_i, y_i}}{p_{x_i, y_i}})}{\sum_{i=1}^n \frac{p'_{x_i, y_i}}{p_{x_i, y_i}}}
+$$
 
-This is not just a problem that is prevalent in A/B test simulations -- even extremely popular recommendation algorithms such as [collaborative filtering with implicit feedback](http://yifanhu.net/PUB/cf.pdf) interpret non-clicks as uninteresting items for the user but this can be problematic if the system never explored the possibility of showing certain categories of such items to the users, and the feedback we receive from users is [missing-not-at-random (MNAR)](http://www.cs.cornell.edu/~ylongqi/publication/recsys18a/). 
+### Finishing Thoughts
 
-### Counterfactual Thinking and Importance Sampling
+Evaluating A/B tests offline can be an extremely underrated tool to have for any business. These methods have been quite successful to evaluate "ideas" offline at many companies such as Yahoo, Microsoft, Netflix and Pandora, based on the [REVEAL workshop](https://sites.google.com/view/reveal2018/) at RecSys this year.
 
-some user context $$ x_u $$, some feed $$ y_u $$ that you show to the user (news-feed/search or product results), and you observe *some* reward $$ \delta $$ (like a click, or "revenue" made during the session etc.) on the recommended items. Traditionally, you'd generally create a usage matrix $$ U $$ where each cell would represent some observed usage
-
-
-
-Inverse Propensity Scoring
-
-Three Ingredients:
-1. Stochasticity and propensity
-
-Most user-interactive systems that are in _exploitation_ mode, are _almost_ deterministic. Many recommender systems score a list of items based on content or collaborative (or both) filtering, and then rank/sort before showing them to the user. This can be problematic because this _greedy_ approach  -->
-
+One thing to note is that this post mostly focused on per-item rewards such as click-through, but it is also possible to model per-feed rewards such as _session time-spent_ but it gets a bit tricky because of the many combinatorial possibilities of the items in each feed. There has been some recent work called the [Slates evaluator](https://arxiv.org/abs/1605.04812) that deals with this exact problem, which I am hoping to write about in a future post.
 

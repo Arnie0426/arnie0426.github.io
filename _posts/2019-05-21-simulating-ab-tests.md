@@ -25,17 +25,17 @@ For example, imagine in a news recommendation problem, you were trying to evalua
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 
-<div class="simpsonsContainer" style="width: 100%; display: table;">
+<div class="simpsonsContainer" style="width: 100%; display: table; border-collapse: collapse;">
     <div style="display: table-row;">
-        <div style="width: 30%; display: table-cell; vertical-align: top;" markdown="1"> 
+        <div style="width: 20%; display: table-cell; vertical-align: top;" markdown="1"> 
 
 |  | Major Publishers | Long-tail |
 |:--------|:-------:|--------:|
-| Algorithm 1  | 0.80   | 0.20   |
-| Algorithm 2   | 0.75   | 0.75   |
+| Alg 1  | 0.80   | 0.20   |
+| Alg 2   | 0.75   | 0.75   |
         
    </div>
-   <div style="padding-left: 5%; width: 60%; display: table-cell;" id="simpsonsChart">
+   <div style="padding-left: 5%; width: 80%; display: table-cell;" id="simpsonsChart">
       <div id="chart_canvas">
          <canvas id="simpsons_canvas"></canvas>
       </div>

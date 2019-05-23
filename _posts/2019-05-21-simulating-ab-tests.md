@@ -24,35 +24,30 @@ For example, imagine in a news recommendation problem, you were trying to evalua
 <script src="/assets/utils.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
-
-<div class="simpsonsContainer" style="width: 100%; display: table; border-collapse: collapse;">
-    <div style="display: table-row;">
-        <div style="width: 20%; display: table-cell; vertical-align: top;" markdown="1"> 
+        
+<div style="padding-left: 5%; padding-right: 5%; text-align:center; width: 80%; display: table-cell;" id="simpsonsChart">
+  <div style="padding-left: 5%; padding-right: 5%; text-align:center; width: 80%;" markdown="1"> 
 
 |  | Major Publishers | Long-tail |
 |:--------|:-------:|--------:|
-| Alg 1  | 0.80   | 0.20   |
-| Alg 2   | 0.75   | 0.75   |
-        
-   </div>
-   <div style="padding-left: 5%; width: 80%; display: table-cell;" id="simpsonsChart">
-      <div id="chart_canvas">
-         <canvas id="simpsons_canvas"></canvas>
-      </div>
-      <div id="simpsonsMPText" style="text-align:center;"></div>
-      <div id="simpsons_slider" style="text-align:center;">
-<input id="mh_vis_s" type ="range" min ="60" max="100" step="2" value="95" oninput="updatePerfVals(value)" list="stepsizes" style="text-align:center;"/>
-<datalist id="stepsizes">
-  <option>60</option>
-  <option>70</option>
-  <option>80</option>
-  <option>90</option>
-  <option>100</option>
-</datalist>
-</div>
-   </div>
-   </div>
+| Algorithm 1  | 0.80   | 0.20   |
+| Algorithm 2   | 0.75   | 0.75   |
 
+</div>
+ <div id="chart_canvas">
+   <canvas id="simpsons_canvas"></canvas>
+ </div>
+ <div id="simpsonsMPText" style="text-align:center;"></div>
+ <div id="simpsons_slider" style="text-align:center;">
+    <input id="mh_vis_s" type ="range" min ="60" max="100" step="2" value="95" oninput="updatePerfVals(value)" list="stepsizes" style="text-align:center;"/>
+    <datalist id="stepsizes">
+        <option>60</option>
+        <option>70</option>
+        <option>80</option>
+        <option>90</option>
+        <option>100</option>
+    </datalist>
+  </div>
 </div>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>

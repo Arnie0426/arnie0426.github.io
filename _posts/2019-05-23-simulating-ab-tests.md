@@ -111,7 +111,7 @@ def inverse_propensity_scoring(user_feedback, num_items_displayed):
   utility = 0.0
   for user_id, item_id in user_feedback:
       # assuming there are functions that return propensities (probabilities) for an item_id and user_id pairs
-      utility += FEEDBACK_WEIGHT[feedback] * (propensity_production(item_id, user_id)) / (propensity_experiment(item_id, user_id))
+      utility += FEEDBACK_WEIGHT[feedback] * (propensity_experiment(item_id, user_id)) / (propensity_production(item_id, user_id))
   return utility / num_items_displayed
 ~~~
 
@@ -150,7 +150,7 @@ def snips_scoring(user_feedback):
   utility, denominator = 0.0, 0.0
   for user_id, item_id in user_feedback:
       # assuming there are functions that return propensities (probabilities) for an item_id and user_id pairs
-      propensity_ratio = (propensity_production(item_id, user_id)) / (propensity_experiment(item_id, user_id))
+      propensity_ratio = (propensity_experiment(item_id, user_id)) / (propensity_production(item_id, user_id))
       utility += FEEDBACK_WEIGHT[feedback] * propensity_ratio
       denominator += propensity_ratio
   return utility / denominator

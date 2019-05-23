@@ -6,6 +6,7 @@ categories: [offline-evaluation, counterfactuals, recommender-systems]
 comments: false
 ---
 
+ <img src="/assets/random_graph.png" alt="Random uncorrelated graph"  style="padding-left: 10%; padding-right: 10%; text-align:center;"> 
 
 While developing machine learning (ML) algorithms in production environments, we usually optimize a function or a loss that has nothing to do with our business goals. We generally care about metrics such as _click-through-rate_ or _diversity_ or _ad-revenue_ but our machine learning algorithms often minimize [log-loss](http://wiki.fast.ai/index.php/Log_Loss) or [root mean squared error (RMSE)](https://en.wikipedia.org/wiki/Root-mean-square_deviation) of arbitrary quantities for computational ease. It is often seen that these ML metrics don't correlate with the original targets, which is why running online A/B tests is so vital in production because it lets us verify our ML models against the true objectives of a task. 
 

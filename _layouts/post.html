@@ -5,6 +5,8 @@ layout: default
 <a class="btn" href= "{{ site.url }}/" >
   Home
 </a>
+<meta name="twitter:card" content = "summary_large_image">
+<meta name="twitter:site" content = "@ArnieB0426">
 {% if page.image.feature %}
 <div class="post-image-feature">
   <img class="feature-image" src=
@@ -14,6 +16,7 @@ layout: default
   "{{ site.url }}/img/{{ page.image.feature }}"
   {% endif %}
   alt="{{ page.title }} feature image">
+  <meta name="twitter:image" content = "{{ page.image.feature }}">
 
   {% if page.image.credit %}
   <span class="image-credit">Photo Credit: <a href="{{ page.image.creditlink }}">{{ page.image.credit }}</a></span>
@@ -25,6 +28,7 @@ layout: default
 <div id="post">
   <header class="post-header">
     <h1 title="{{ page.title }}">{{ page.title }}</h1>
+    <meta name="twitter:title" content = "{{ page.title }}">
     <span class="post-meta">
       <span class="post-date">
         {{ page.date | date: "%-d %b %Y" | upcase }}

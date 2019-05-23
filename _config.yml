@@ -36,7 +36,7 @@ owner:
   name: Arnab Bhadury 
   avatar: logo.png
   job: "ML Engineer @ Flipboard, ML meetups co-organizer"
-  bio: "Interested in Topic Modeling/Extraction, Bayesian Inference, Recommender Systems, Counterfactual Evaluation and endless sarcasm."
+  bio: "Interested in Topic Modeling/Extraction, Recommender Systems, Bayesian Inference, Counterfactual Evaluation and endless sarcasm."
   email: "abhadury@flipboard.com"
   disqus-shortname:
   twitter: "ArnieB0426"
@@ -51,7 +51,7 @@ owner:
   github: arnie0426
   gitlab: #username
   stackoverflow: #123456/username   from a "http://stackoverflow.com/users/123456/username" link
-  linkedin: #username
+  linkedin: arnab-bhadury-a6304768
   skype: #username
   xing: #username
   instagram: #username
@@ -67,3 +67,4 @@ owner:
   flickr: #username
   500px: #username
   codepen: #username
+  flipboard: Arnie0426

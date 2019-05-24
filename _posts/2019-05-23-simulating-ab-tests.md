@@ -109,7 +109,7 @@ def inverse_propensity_scoring(user_feedback, num_items_displayed):
     float: Estimated click through rate
    """
   utility = 0.0
-  for user_id, item_id in user_feedback:
+  for user_id, item_id, feedback in user_feedback:
       # assuming there are functions that return propensities (probabilities) for an item_id and user_id pairs
       utility += FEEDBACK_WEIGHT[feedback] * (propensity_experiment(item_id, user_id)) / (propensity_production(item_id, user_id))
   return utility / num_items_displayed
@@ -119,7 +119,7 @@ def inverse_propensity_scoring(user_feedback, num_items_displayed):
 
 #### Deterministic Ranking Algorithms
 
-Most user-interactive systems tend to be in full _exploitation_ mode and score a list of items based on content or collaborative (or both) filtering, and then _greedily_ rank/sort before showing them to the user. For IPS to work, however, the system needs to be stochastic and many production systems run such deterministic algorithms. The `propensity_production` function in the code snippet above in a deterministic algorithm is always 1, and as such it doesn't supply the required information. 
+Most user-interactive systems tend to be in full _exploitation_ mode and score a list of items based on content or collaborative (or both) filtering, and then _greedily_ rank/sort before showing them to the user. For IPS to work, however, the system needs to be stochastic and many production systems don't run such stochastic algorithms. The `propensity_production` function in the code snippet above in a deterministic algorithm is always 1, and as such it doesn't supply the required information. 
 
 A practical way around it is to get multinomial samples without replacement, i.e. create a weighted dice based on the scores and roll for each item, reweighting the dice after each roll. If we have a _score_ for each `(user_id, item_id)` tuple, then we can simply use [NumPy's](https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.random.choice.html) `np.random.choice` with `replace=False`. This is sometimes also referred to as Plackett-Luce method and the main selling point of this solution is that the mode of this multinomial is the reverse sorted deterministic function.  
 
@@ -148,7 +148,7 @@ def snips_scoring(user_feedback):
     float: Estimated click through rate
    """
   utility, denominator = 0.0, 0.0
-  for user_id, item_id in user_feedback:
+  for user_id, item_id, feedback in user_feedback:
       # assuming there are functions that return propensities (probabilities) for an item_id and user_id pairs
       propensity_ratio = (propensity_experiment(item_id, user_id)) / (propensity_production(item_id, user_id))
       utility += FEEDBACK_WEIGHT[feedback] * propensity_ratio

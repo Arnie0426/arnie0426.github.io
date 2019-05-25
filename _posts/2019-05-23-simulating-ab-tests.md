@@ -93,7 +93,7 @@ $$
 $$
 
 
-Where $$p'_{x_i, y_i}$$ is the propensity for $$y_i$$ item to be recommended to user $$x_i$$ for a *new* different algorith $$A$$. Because of the nature of the equation, for any item that is recommended by the new algorithm $$A$$, $$A_0$$ needs to have a non-zero propensity for that item. Here's some sample Python code that lets you evaluate performance of a new algorithm offline.
+Where $$p'_{x_i, y_i}$$ is the propensity for $$y_i$$ item to be recommended to user $$x_i$$ for a *new* different algorithm $$A$$. Because of the nature of the equation, for any item that is recommended by the new algorithm $$A$$, $$A_0$$ needs to have a non-zero propensity for that item. Here's some sample Python code that lets you evaluate performance of a new algorithm offline.
 
 ~~~ python
 def inverse_propensity_scoring(user_feedback, num_items_displayed):

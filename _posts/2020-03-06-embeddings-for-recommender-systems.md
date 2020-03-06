@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A Case For Embeddings In Recommendation Problems"
-date:   2020-03-05 06:00
+date:   2020-03-05 08:00
 categories: [embeddings, deep-learning, recommender-systems]
 comments: false
 ---
@@ -48,6 +48,6 @@ For recommendation, there are many different ways to create these sequences. Air
 
 In addition to the task at hand that each of those representations help solve (such as [finding similar items](https://medium.com/the-graph/applying-deep-learning-to-related-pins-a6fee3c92f5e)), they are modular and amenable for *[transfer learning](https://en.wikipedia.org/wiki/Transfer_learning)*. One great thing about deep learning has been that you *almost never* have to start solving a problem from scratch, and all these different embeddings act as great places to start for new problems. If you wanted to build a new classifier (say, a spam detector), you could use your item embeddings as a starting point, and would be able to train a model much quicker with some basic [fine-tuning](http://wiki.fast.ai/index.php/Fine_tuning). 
 
-These modular mappings to latent spaces have been extremely useful for me, and in addition to solving some recommendation problems, I have also been able to reuse and fine-tune these embeddings and solve many different end-tasks. In addition, storing these embeddings in a centralized [model storage](https://mlflow.org/docs/latest/models.html) also helps teams reduce redundancy and provides them with good foundations to build on for many problems. 
+These modular mappings to latent spaces have been extremely useful for me, and in addition to solving some recommendation problems, I have also been able to reuse and fine-tune these embeddings and solve many different end-tasks. Storing these embeddings in a centralized [model storage](https://mlflow.org/docs/latest/models.html) further helps teams reduce redundancy and provides them with good foundations to build on for many problems. 
 
 While I hadn't initially bought into the whole deep learning for recommender systems craze, I am starting to see beyond just the minimal performance gains on the original task, and highly recommend everyone to play around with this (still relatively new) paradigm in recommender systems!

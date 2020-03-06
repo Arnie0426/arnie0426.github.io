@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A Case For Embeddings In Recommendation Problems"
-date:   2020-03-05 08:00
+date:   2020-03-06 07:55
 categories: [embeddings, deep-learning, recommender-systems]
 comments: false
 ---

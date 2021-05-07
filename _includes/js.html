@@ -1,10 +1,15 @@
 <script type="text/javascript" src="{{ site.url }}/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="{{ site.url }}/js/main.js"></script>
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      inlineMath: [['$','$']]
+    }
+  });
 </script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
 {% if site.owner.google.analytics %}
 <script async src="//www.googletagmanager.com/gtag/js?id=UA-133304905-1"></script>
